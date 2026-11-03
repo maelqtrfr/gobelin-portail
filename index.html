@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!--
+  PAGE PIÈGE — EXERCICE PÉDAGOGIQUE (EFREI / Bachelor Cybersécurité).
+  Entreprises et domaines 100 % fictifs (.example = domaine réservé, non routable).
+  Le formulaire NE COLLECTE RIEN et N'ENVOIE RIEN : aucun réseau, aucun stockage.
+  À héberger sur VOTRE dépôt GitHub Pages pour la démo en classe.
+-->
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Portail Éditeur · Hyperbole Interactive</title>
+<style>
+  :root{
+    --bg:#0d0f14; --panel:#151922; --panel2:#1b2030; --ink:#e8ecf4;
+    --muted:#9aa3b5; --line:#2a3142; --accent:#4ade80; --accent2:#22c55e;
+    --danger:#f59e0b; --field:#0f131c;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:
+      radial-gradient(1200px 600px at 50% -10%, #16351f 0%, transparent 60%),
+      var(--bg);
+    color:var(--ink); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px;
+  }
+  .brand{display:flex; align-items:center; gap:12px; margin-bottom:22px}
+  .brand .mark{
+    width:40px; height:40px; border-radius:9px; display:grid; place-items:center;
+    background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#06240f; font-weight:900; font-size:20px;
+  }
+  .brand .name{font-weight:800; letter-spacing:.3px; font-size:19px}
+  .brand .name span{color:var(--accent); display:block; font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; margin-top:2px; color:var(--muted)}
+  .card{
+    width:100%; max-width:430px; background:var(--panel); border:1px solid var(--line);
+    border-radius:16px; padding:30px 28px; box-shadow:0 24px 60px rgba(0,0,0,.45);
+  }
+  .banner{
+    display:flex; gap:10px; align-items:flex-start; background:rgba(245,158,11,.1);
+    border:1px solid rgba(245,158,11,.35); color:#fcd77f; border-radius:10px;
+    padding:11px 13px; font-size:13px; line-height:1.45; margin-bottom:22px;
+  }
+  .banner b{color:var(--danger)}
+  h1{font-size:19px; margin:0 0 4px}
+  .sub{color:var(--muted); font-size:13.5px; margin:0 0 22px}
+  label{display:block; font-size:12.5px; color:var(--muted); margin:0 0 6px; font-weight:600}
+  .field{
+    width:100%; background:var(--field); border:1px solid var(--line); color:var(--ink);
+    border-radius:9px; padding:12px 13px; font-size:14.5px; margin-bottom:17px; outline:none;
+  }
+  .field:focus{border-color:var(--accent); box-shadow:0 0 0 3px rgba(74,222,128,.15)}
+  .btn{
+    width:100%; border:0; border-radius:9px; padding:13px; font-size:15px; font-weight:700;
+    cursor:pointer; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#06240f;
+  }
+  .btn:hover{filter:brightness(1.07)}
+  .row{display:flex; justify-content:space-between; align-items:center; margin:-6px 0 20px; font-size:12.5px}
+  .row a{color:var(--accent); text-decoration:none}
+  .row label{display:flex; align-items:center; gap:7px; margin:0; color:var(--muted)}
+  .status{margin-top:16px; font-size:13.5px; text-align:center; min-height:20px}
+  .foot{color:var(--muted); font-size:11px; text-align:center; margin-top:24px; max-width:430px; line-height:1.5}
+  .foot b{color:#c7cedd}
+</style>
+</head>
+<body>
+
+  <div class="brand">
+    <div class="mark">H</div>
+    <div class="name">Hyperbole Interactive<span>Portail de livraison éditeur</span></div>
+  </div>
+
+  <div class="card">
+    <div class="banner">
+      <span>⚠</span>
+      <div><b>Jalon bêta — 13 novembre.</b> Votre accès Forge doit être activé pour relier le compte QA à la livraison du build. Activation requise avant vendredi.</div>
+    </div>
+
+    <h1>Accès Forge — Gobelin Hurlant</h1>
+    <p class="sub">Projet&nbsp;: <b>Grotte Fiscale</b>. Connectez-vous avec vos identifiants Forge habituels pour confirmer l'accès.</p>
+
+    <form id="f" autocomplete="off" novalidate>
+      <label for="u">Identifiant Forge</label>
+      <input class="field" id="u" type="text" placeholder="prénom@gobelin-hurlant.example" required>
+
+      <label for="p">Mot de passe Forge</label>
+      <input class="field" id="p" type="password" placeholder="••••••••••••" required>
+
+      <div class="row">
+        <label><input type="checkbox"> Rester connecté</label>
+        <a href="#" onclick="return false">Mot de passe oublié ?</a>
+      </div>
+
+      <button class="btn" type="submit">Activer mon accès</button>
+      <div class="status" id="s"></div>
+    </form>
+  </div>
+
+  <p class="foot">
+    <b>Page fictive — exercice de sensibilisation (EFREI).</b> Hyperbole Interactive et Gobelin Hurlant n'existent pas.
+    Ce formulaire ne collecte, n'enregistre et n'envoie aucune donnée.
+  </p>
+
+<script>
+  // Formulaire volontairement inerte : rien n'est lu, stocké ni transmis.
+  document.getElementById('f').addEventListener('submit', function(e){
+    e.preventDefault();
+    var s = document.getElementById('s');
+    s.style.color = '#9aa3b5';
+    s.textContent = 'Vérification de l\u2019accès…';
+    setTimeout(function(){
+      s.style.color = '#4ade80';
+      s.textContent = '✓ Démonstration terminée — aucune donnée n\u2019a été enregistrée.';
+      document.getElementById('p').value = '';
+    }, 1100);
+  });
+</script>
+</body>
+</html>
