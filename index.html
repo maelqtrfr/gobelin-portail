@@ -2,8 +2,9 @@
 <!--
   PAGE PIÈGE — EXERCICE PÉDAGOGIQUE (EFREI / Bachelor Cybersécurité).
   Entreprises et domaines 100 % fictifs (.example = domaine réservé, non routable).
-  Le formulaire NE COLLECTE RIEN et N'ENVOIE RIEN : aucun réseau, aucun stockage.
-  À héberger sur VOTRE dépôt GitHub Pages pour la démo en classe.
+  Le formulaire N'ENVOIE RIEN et NE STOCKE RIEN : aucun réseau, aucun localStorage.
+  La "vue attaquant" se contente d'afficher, dans le même navigateur, ce qui vient
+  d'être tapé, pour la démonstration en classe. Aucune donnée ne quitte la page.
 -->
 <html lang="fr">
 <head>
@@ -13,54 +14,61 @@
 <title>Portail Éditeur · Hyperbole Interactive</title>
 <style>
   :root{
-    --bg:#0d0f14; --panel:#151922; --panel2:#1b2030; --ink:#e8ecf4;
-    --muted:#9aa3b5; --line:#2a3142; --accent:#4ade80; --accent2:#22c55e;
-    --danger:#f59e0b; --field:#0f131c;
+    --bg:#0d0f14; --panel:#151922; --ink:#e8ecf4; --muted:#9aa3b5;
+    --line:#2a3142; --accent:#4ade80; --accent2:#22c55e; --danger:#f59e0b; --field:#0f131c;
   }
   *{box-sizing:border-box}
   body{
     margin:0; min-height:100vh; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    background:
-      radial-gradient(1200px 600px at 50% -10%, #16351f 0%, transparent 60%),
-      var(--bg);
+    background:radial-gradient(1200px 600px at 50% -10%, #16351f 0%, transparent 60%), var(--bg);
     color:var(--ink); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px;
   }
   .brand{display:flex; align-items:center; gap:12px; margin-bottom:22px}
-  .brand .mark{
-    width:40px; height:40px; border-radius:9px; display:grid; place-items:center;
-    background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#06240f; font-weight:900; font-size:20px;
-  }
+  .brand .mark{width:40px; height:40px; border-radius:9px; display:grid; place-items:center;
+    background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#06240f; font-weight:900; font-size:20px;}
   .brand .name{font-weight:800; letter-spacing:.3px; font-size:19px}
-  .brand .name span{color:var(--accent); display:block; font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; margin-top:2px; color:var(--muted)}
-  .card{
-    width:100%; max-width:430px; background:var(--panel); border:1px solid var(--line);
-    border-radius:16px; padding:30px 28px; box-shadow:0 24px 60px rgba(0,0,0,.45);
-  }
-  .banner{
-    display:flex; gap:10px; align-items:flex-start; background:rgba(245,158,11,.1);
+  .brand .name span{display:block; font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; margin-top:2px; color:var(--muted)}
+  .card{width:100%; max-width:430px; background:var(--panel); border:1px solid var(--line);
+    border-radius:16px; padding:30px 28px; box-shadow:0 24px 60px rgba(0,0,0,.45);}
+  .banner{display:flex; gap:10px; align-items:flex-start; background:rgba(245,158,11,.1);
     border:1px solid rgba(245,158,11,.35); color:#fcd77f; border-radius:10px;
-    padding:11px 13px; font-size:13px; line-height:1.45; margin-bottom:22px;
-  }
+    padding:11px 13px; font-size:13px; line-height:1.45; margin-bottom:22px;}
   .banner b{color:var(--danger)}
   h1{font-size:19px; margin:0 0 4px}
   .sub{color:var(--muted); font-size:13.5px; margin:0 0 22px}
   label{display:block; font-size:12.5px; color:var(--muted); margin:0 0 6px; font-weight:600}
-  .field{
-    width:100%; background:var(--field); border:1px solid var(--line); color:var(--ink);
-    border-radius:9px; padding:12px 13px; font-size:14.5px; margin-bottom:17px; outline:none;
-  }
+  .field{width:100%; background:var(--field); border:1px solid var(--line); color:var(--ink);
+    border-radius:9px; padding:12px 13px; font-size:14.5px; margin-bottom:17px; outline:none;}
   .field:focus{border-color:var(--accent); box-shadow:0 0 0 3px rgba(74,222,128,.15)}
-  .btn{
-    width:100%; border:0; border-radius:9px; padding:13px; font-size:15px; font-weight:700;
-    cursor:pointer; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#06240f;
-  }
+  .btn{width:100%; border:0; border-radius:9px; padding:13px; font-size:15px; font-weight:700;
+    cursor:pointer; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#06240f;}
   .btn:hover{filter:brightness(1.07)}
   .row{display:flex; justify-content:space-between; align-items:center; margin:-6px 0 20px; font-size:12.5px}
   .row a{color:var(--accent); text-decoration:none}
   .row label{display:flex; align-items:center; gap:7px; margin:0; color:var(--muted)}
   .status{margin-top:16px; font-size:13.5px; text-align:center; min-height:20px}
-  .foot{color:var(--muted); font-size:11px; text-align:center; margin-top:24px; max-width:430px; line-height:1.5}
-  .foot b{color:#c7cedd}
+  /* bouton discret "vue attaquant" pour la démo */
+  .demo-toggle{position:fixed; bottom:12px; right:14px; font-size:11px; color:#39414f;
+    background:transparent; border:none; cursor:pointer; letter-spacing:.5px;}
+  .demo-toggle:hover{color:var(--muted)}
+  /* panneau attaquant */
+  .overlay{position:fixed; inset:0; background:rgba(3,6,10,.72); display:none; align-items:center; justify-content:center; padding:20px; z-index:50}
+  .overlay.on{display:flex}
+  .console{width:100%; max-width:520px; background:#0b1020; border:1px solid #243049; border-radius:12px;
+    font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace; color:#d7f7e6; box-shadow:0 20px 60px rgba(0,0,0,.6)}
+  .console .top{display:flex; align-items:center; gap:8px; padding:11px 15px; border-bottom:1px solid #243049; color:#8aa0b8; font-size:12px}
+  .dot{width:11px; height:11px; border-radius:50%}
+  .console .body{padding:18px 18px 20px}
+  .console h2{margin:0 0 12px; font-size:14px; color:#4ade80; letter-spacing:.5px}
+  .kv{display:grid; grid-template-columns:120px 1fr; gap:6px 10px; font-size:14px}
+  .kv .k{color:#7c8aa0}
+  .kv .v{color:#fff; word-break:break-all}
+  .pw{color:#fca5a5}
+  .xfil{margin-top:14px; padding:10px 12px; background:#0a1a12; border:1px solid #1d3a28; border-radius:7px; font-size:12.5px; color:#7fe0a3; line-height:1.6}
+  .xfil .sim{color:var(--danger)}
+  .xfil .ok{color:#4ade80}
+  .note{margin-top:16px; font-size:11.5px; color:#5f6f85; line-height:1.5}
+  .close{margin-top:16px; background:#1b2740; color:#cbd5e1; border:1px solid #2a3a57; border-radius:7px; padding:9px 14px; font-size:13px; cursor:pointer}
 </style>
 </head>
 <body>
@@ -96,23 +104,68 @@
     </form>
   </div>
 
-  <p class="foot">
-    <b>Page fictive — exercice de sensibilisation (EFREI).</b> Hyperbole Interactive et Gobelin Hurlant n'existent pas.
-    Ce formulaire ne collecte, n'enregistre et n'envoie aucune donnée.
-  </p>
+  <!-- déclencheur discret de la vue démo (invisible pour le public pendant le vote) -->
+  <button class="demo-toggle" id="demoBtn" title="Vue attaquant (démo)">·démo·</button>
+
+  <!-- panneau "attaquant" : affiche localement ce qui a été tapé. Rien n'est transmis. -->
+  <div class="overlay" id="overlay">
+    <div class="console">
+      <div class="top">
+        <span class="dot" style="background:#ff5f56"></span>
+        <span class="dot" style="background:#ffbd2e"></span>
+        <span class="dot" style="background:#27c93f"></span>
+        <span style="margin-left:6px">capture@portail-piege</span>
+      </div>
+      <div class="body">
+        <h2>⛏  IDENTIFIANTS CAPTURÉS — accès Forge</h2>
+        <div class="kv">
+          <div class="k">Identifiant</div><div class="v" id="cap-u">—</div>
+          <div class="k">Mot de passe</div><div class="v pw" id="cap-p">—</div>
+          <div class="k">Horodatage</div><div class="v" id="cap-t">—</div>
+          <div class="k">Source</div><div class="v">Portail Hyperbole (usurpé)</div>
+        </div>
+        <div class="xfil" id="xfil"></div>
+        <div class="note">Démonstration en local — ces valeurs ne sont ni transmises ni enregistrées. C'est exactement ce qu'un attaquant récupérerait si la page renvoyait les données.</div>
+        <button class="close" id="closeBtn">Fermer</button>
+      </div>
+    </div>
+  </div>
 
 <script>
-  // Formulaire volontairement inerte : rien n'est lu, stocké ni transmis.
+  var lastU = "", lastP = "";
+
   document.getElementById('f').addEventListener('submit', function(e){
     e.preventDefault();
+    // "capture" strictement locale (variables en mémoire) — rien n'est envoyé.
+    lastU = document.getElementById('u').value;
+    lastP = document.getElementById('p').value;
+
     var s = document.getElementById('s');
     s.style.color = '#9aa3b5';
-    s.textContent = 'Vérification de l\u2019accès…';
+    s.textContent = 'Vérification de l’accès…';
     setTimeout(function(){
       s.style.color = '#4ade80';
-      s.textContent = '✓ Démonstration terminée — aucune donnée n\u2019a été enregistrée.';
-      document.getElementById('p').value = '';
-    }, 1100);
+      s.textContent = '✓ Accès vérifié. Redirection vers la Forge…';
+    }, 1000);
+  });
+
+  function openDemo(){
+    document.getElementById('cap-u').textContent = lastU || '(aucune saisie pour l’instant)';
+    document.getElementById('cap-p').textContent = lastP || '(aucune saisie pour l’instant)';
+    document.getElementById('cap-t').textContent = new Date().toLocaleString('fr-FR');
+    document.getElementById('xfil').innerHTML =
+      '&gt; transmission de la capture…<br>POST /collect &rarr; <span class="ok">200 OK</span> '
+      + '<span class="sim">(SIMULÉ — aucune donnée réelle n’est envoyée)</span>';
+    document.getElementById('overlay').classList.add('on');
+  }
+  function closeDemo(){ document.getElementById('overlay').classList.remove('on'); }
+
+  document.getElementById('demoBtn').addEventListener('click', openDemo);
+  document.getElementById('closeBtn').addEventListener('click', closeDemo);
+  // raccourci clavier : touche "d" pour ouvrir la vue démo pendant la présentation
+  document.addEventListener('keydown', function(ev){
+    if((ev.key === 'd' || ev.key === 'D') && !/input|textarea/i.test(document.activeElement.tagName)) openDemo();
+    if(ev.key === 'Escape') closeDemo();
   });
 </script>
 </body>
